@@ -15,7 +15,7 @@ Bu sayfanın üstünde **Use this template → Create a new repository**.
 - Depon **açık** ya da **gizli** olabilir. Gizli tutarsan oyunun yayımlanana
   kadar kimse görmez.
 - Gizliyse: deponda **Settings → Collaborators → Add people** →
-  **`yavuztaniss`**. İnceleyebilmemiz için gerekli.
+  **`zuv4y`**. İnceleyebilmemiz için gerekli.
 
 ## 2. Oyununu yaz
 

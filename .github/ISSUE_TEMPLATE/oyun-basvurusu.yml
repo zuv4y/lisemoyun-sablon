@@ -21,7 +21,7 @@ body:
     id: depo
     attributes:
       label: Deponun bağlantısı
-      description: Oyunun bu şablondan açtığın kendi deponda. Gizli depoysa `yavuztaniss` hesabını ortak çalışan (collaborator) olarak ekle.
+      description: Oyunun bu şablondan açtığın kendi deponda. Gizli depoysa `zuv4y` hesabını ortak çalışan (collaborator) olarak ekle.
       placeholder: https://github.com/kullanici-adin/kelime-avi
     validations:
       required: true
@@ -40,7 +40,7 @@ body:
       label: Depon
       options:
         - Açık
-        - Gizli — yavuztaniss'i ortak çalışan olarak ekledim
+        - Gizli — zuv4y hesabını ortak çalışan olarak ekledim
     validations:
       required: true
 
