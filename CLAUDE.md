@@ -37,6 +37,13 @@ Kaynak: Lisem'in özel oyun deposu (`lisemoyun`). Bu dosya oradaki
      başlığı (CSP) reddeder. Ret hata fırlatmaz, yalnızca `onerror` gelir;
      oyun beklerken takılır. `SharedWorker` da yok. Oyun tek iş parçacığında
      çalışır; ağır iş karelere bölünür.
+   - Görsel `blob:` adresinden AÇILMAZ: Safari (iPhone'da her tarayıcı
+     Safari motorudur) bu çerçevede `blob:` görselini yüklemez, Chrome
+     yükler. Phaser görseli varsayılan olarak `blob:`dan açar ve Safari'de
+     her sprite yeşil "eksik doku" kutusu olur. Phaser'da oyun ayarına
+     `loader: { imageLoadType: 'HTMLImageElement', crossOrigin: 'anonymous' }`
+     yazılır; `URL.createObjectURL` ile görsel açılmaz. `npm run dene` bunu
+     sınar.
    - `SharedArrayBuffer` ve çok iş parçacıklı dışa aktarımlar (Godot 4,
      Unity) yok. Tek iş parçacıklı dışa aktarım kullanılır.
 
@@ -96,6 +103,12 @@ Kaynak: Lisem'in özel oyun deposu (`lisemoyun`). Bu dosya oradaki
 
 7. **Sürüm:** Başvurduğun sürüm klasörü (`1/`) kabul edilince değişmez.
    Güncelleme yeni klasördür (`2/`).
+
+8. **Başvuru:** Oyun geliştiricinin KENDİ deposunda kalır. Lisem'in şablon
+   deposuna (`zuv4y/lisemoyun-sablon`) pull request AÇILMAZ; açılan istek
+   kendiliğinden kapanır. Başvuru şablon deposunda Issues › "Oyun
+   başvurusu"dur; güncelleme kendi depoda yeni sürüm klasörü ve başvurunun
+   altına bir yorumdur.
 
 ## Komutlar
 

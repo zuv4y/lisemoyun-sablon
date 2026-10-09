@@ -11,6 +11,9 @@ yayımlar.
 ## 1. Kendi deponu aç
 
 Bu sayfanın üstünde **Use this template → Create a new repository**.
+**Fork'lama**: fork'un bu depoya bağlı kalır ve oradan açılan pull request
+buraya düşer. Bu depo herkesin kopyaladığı boş şablondur; oyunun kendi
+deponda kalır.
 
 - Depon **açık** ya da **gizli** olabilir. Gizli tutarsan oyunun yayımlanana
   kadar kimse görmez.
@@ -52,6 +55,10 @@ Bu yüzden bazı şeyler çalışmaz. Kısaca:
 - Yüklenince `LisemOyun.hazir()` çağrılmalı; 20 saniye içinde gelmezse
   site "Oyun yüklenemedi" der. El bitince `LisemOyun.skor(n)` çağrılır.
 - Klavye ve dokunmatik ekranla oynanmalı; telefonda da çalışmalı.
+- Görsel `blob:` adresinden açılmaz: Safari (iPhone'daki bütün tarayıcılar)
+  kısıtlı çerçevede açmaz, Chrome açar. Phaser kullanıyorsan oyun
+  ayarına `loader: { imageLoadType: 'HTMLImageElement', crossOrigin:
+  'anonymous' }` yaz. `npm run dene` bunu sınar.
 - Kişisel veri istenmez. Reklam, sohbet, skor tablosu, satın alma yok.
   İçerik okul ortamına uygun olmalı.
 - Başka bir oyunun ya da markanın adı, logosu ve karakteri kullanılmaz.
@@ -89,6 +96,8 @@ Her gönderimde GitHub da `npm run check`i kendiliğinden koşar (Actions).
 ## 6. Başvur
 
 Bu şablon deposunda: **Issues → New issue → Oyun başvurusu**.
+Pull request AÇMA: bu depoya oyun eklenmez, açılan pull request
+kendiliğinden kapanır. Oyunun kendi deponda durur, biz oradan alırız.
 
 Başvuru herkese açık görünür. Oraya telefon, e-posta, okul gibi kişisel
 bilgi yazma. Lisem kullanıcı adını da oraya değil, deponda `oyun.json`a yaz.
@@ -101,8 +110,9 @@ bilgi yazma. Lisem kullanıcı adını da oraya değil, deponda `oyun.json`a yaz
 3. **İmza:** Anonim seçmediysen ve Lisem profilin açıksa adın oyun
    sayfasında, vitrinde ve profilindeki "Oyunları" bölümünde görünür.
    Oynanma sayısı, beğeni ve sıralama yok.
-4. **Güncelleme:** Yeni sürüm için `oyunlar/<oyun-adi>/2/` klasörünü aç
-   (yayındaki sürüme dokunulmaz) ve başvurunun altına yaz.
+4. **Güncelleme:** Yeni sürüm için kendi deponda `oyunlar/<oyun-adi>/2/`
+   klasörünü aç (yayındaki sürüme dokunulmaz) ve başvurunun altına yaz.
+   Pull request gerekmez.
 5. **Kaldırma:** Oyununun kaldırılmasını istersen başvurunun altına yazman
    yeterli.
 
