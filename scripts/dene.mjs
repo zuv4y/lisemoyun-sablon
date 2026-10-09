@@ -13,6 +13,7 @@
  *   • telefon dikey ve yatay ölçüde açılıyor mu
  *   • adres DOĞRUDAN açılınca (çerçevesiz) hata veriyor mu, WebAssembly
  *     derleniyor mu (sunucu başlıkları)
+ *   • Safari: oyun görseli blob: adresinden açıyor mu (Safari açmaz)
  *
  * Ekran görüntüleri `.dene/<oyun>-<sürüm>-*.png`. `--kapak`: oyunu
  * `?kapak` ile 1600 × 1000 açıp `oyunlar/<oyun>/kapak.jpg`i yazar (oyun
@@ -161,7 +162,37 @@ for (const h of hedefler) {
   sonuc('doğrudan açılınca hata yok', dHatalar.length === 0, dHatalar.slice(0, 3).join(' | '));
   await dogrudan.close();
 
-  // 6. Kapak
+  // 6. Safari. Kısıtlı çerçevede (null köken) WebKit blob: adresli görseli
+  //    YÜKLEMEZ, Chrome yükler: Chrome'da çalışan oyun iPhone'da (orada her
+  //    tarayıcı WebKit) görselsiz açılır. Phaser görseli varsayılan olarak
+  //    XHR ile indirip blob: adresinden açar (Penguen Şef 1, Ekim 2026). Bu
+  //    adım Chromium'a aynı yasağı koyar: CSP'nin img-src'sinden blob:
+  //    çıkarılır, blob: görsel isteyen her yükleme konsola düşer.
+  const safari = await tarayici.newContext({ viewport: { width: 420, height: 760 } });
+  await safari.route(`${sunucu.oyunKokeni}/**`, async (route) => {
+    const yanit = await route.fetch();
+    const basliklar = { ...yanit.headers() };
+    const csp = basliklar['content-security-policy'];
+    if (csp) basliklar['content-security-policy'] = csp.replace(/(img-src[^;]*?)\s+blob:/, '$1');
+    await route.fulfill({ response: yanit, headers: basliklar });
+  });
+  const sp = await safari.newPage();
+  const blobGorsel = [];
+  sp.on('console', (m) => {
+    if (m.type() === 'error' && /image 'blob:/.test(m.text())) blobGorsel.push(m.text());
+  });
+  await sp.goto(`${sunucu.oyunKokeni}/${h.ad}/${h.surum}/index.html`);
+  await sp.waitForTimeout(2500);
+  sonuc(
+    'Safari: görseller blob: adresinden açılmıyor',
+    blobGorsel.length === 0,
+    blobGorsel.length
+      ? `${blobGorsel.length} görsel blob:'dan — Safari'de görünmez. Phaser: loader: { imageLoadType: 'HTMLImageElement', crossOrigin: 'anonymous' }`
+      : '',
+  );
+  await safari.close();
+
+  // 7. Kapak
   if (kapakIste) {
     const kb = await tarayici.newContext({ viewport: { width: 1600, height: 1000 } });
     const kp = await kb.newPage();

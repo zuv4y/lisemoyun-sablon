@@ -1,0 +1,39 @@
+name: Şablona pull request
+
+# Bu depo herkesin kopyaladığı boş şablondur; oyun buraya eklenmez. Fork'tan
+# açılan pull request kendiliğinden kapanır ve yolu yazılır (Penguen Şef,
+# Ekim 2026). Yalnızca ŞABLON deposunda koşar: şablondan açılan geliştirici
+# depolarında `is_template` yanlıştır ve iş atlanır. Lisem'in kendi dalından
+# açtığı kit eşitlemesi (aynı depo) dokunulmaz.
+#
+# pull_request_target: fork'tan gelen istekte yazma izni yalnızca bununla
+# var. Kod ÇEKİLMEZ ve isteğin hiçbir metni betiğe girmez.
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  kapat:
+    if: github.event.repository.is_template && github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const number = context.payload.pull_request.number;
+            const body = [
+              'Merhaba! Bu depo Lisem Oyun’un **boş şablonu**: herkes oyununa buradan başlıyor, o yüzden buraya oyun eklenmiyor ve bu istek kendiliğinden kapandı.',
+              '',
+              '- Oyunun **kendi deponda** kalır (Use this template ile açtığın depo ya da bu fork). Biz oradan alırız.',
+              '- Başvuru: bu depoda **Issues → New issue → Oyun başvurusu**.',
+              '- Güncelleme: kendi deponda yeni sürüm klasörü aç (`oyunlar/<oyun-adi>/2/`) ve başvurunun altına yaz.',
+              '',
+              'Ayrıntı: README › 1. Kendi deponu aç, 6. Başvur, Sonra ne olur.',
+            ].join('\n');
+            await github.rest.issues.createComment({ owner, repo, issue_number: number, body });
+            await github.rest.pulls.update({ owner, repo, pull_number: number, state: 'closed' });
